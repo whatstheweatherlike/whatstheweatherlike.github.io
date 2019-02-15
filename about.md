@@ -14,22 +14,7 @@ fast and accurate as possible.
 Licence to use this service
 ===
 
-MIT License
-
-Copyright (c) 2018 whatstheweatherlike
-
-Permission is hereby granted, free of charge, to any person (called "user") using this site (the "Service"), including all associated APIs, assets, source code and all other items served by this service without restriction, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-publications using this service.
-
-THE SERVICE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SERVICE OR THE USE OR OTHER DEALINGS IN THE
-SERVICE.
+{% include_relative LICENSE %}
 
 
 Privacy information
