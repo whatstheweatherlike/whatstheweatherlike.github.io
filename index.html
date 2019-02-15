@@ -1,0 +1,57 @@
+---
+layout: page
+title:
+permalink: /
+---
+
+<div id="weatherDiv">
+    <span id="weather">
+    Meh :-)
+
+    Nothing here yet, please check back later...
+    </span>
+    <button onclick="loadWeatherData()">Refresh</button>
+
+</div>
+
+<script>
+    var weatherDiv = document.getElementById("weather");
+
+    function loadWeatherData() {
+        if (navigator.geolocation) {
+            weatherDiv.innerHTML = "Loading weather data...";
+          navigator.geolocation.getCurrentPosition(displayWeather);
+        } else {
+          weatherDiv.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    async function displayWeather(position) {
+        var latLongCoords = position.coords.latitude + ',' + position.coords.longitude;
+        weatherDiv.innerHTML = "Retrieving current temperature for " + position.coords.latitude + ',' + position.coords.longitude + ": ";
+        fetch('http://localhost:8080/weather-at/' + latLongCoords, {mode: 'cors'})
+        .then(
+            function(response) {
+                  if (response.ok) {
+                      return response.json()
+                  }
+                  console.log('Looks like there was a problem. Status Code: ' +
+                    response.status);
+              }
+      )
+        .then(
+        function(json) {
+              weatherDiv.innerHTML = "Weather for " + json.name + ": " + json.main.temp + "˚C, " + json.weather[0].description + ", wind " + json.wind.speed + " knots from " + degToCompass(json.wind.deg)
+          }
+        )
+        .catch(err => { console.log('Error: ', err) });
+    }
+
+    function degToCompass(num) {
+        var val = Math.floor((num / 22.5) + 0.5);
+        var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+        return arr[(val % 16)];
+    }
+
+    loadWeatherData();
+</script>

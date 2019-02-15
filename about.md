@@ -11,7 +11,7 @@ This service aims to provide immediate information about the current weather
 to the user at his location with minimal interaction while being as
 fast and accurate as possible.
 
-Licence to use this service
+License to use this service
 ===
 
 {% include_relative LICENSE %}
