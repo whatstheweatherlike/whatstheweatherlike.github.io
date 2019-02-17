@@ -29,7 +29,7 @@ permalink: /
     async function displayWeather(position) {
         var latLongCoords = position.coords.latitude + ',' + position.coords.longitude;
         weatherDiv.innerHTML = "Retrieving current temperature for " + position.coords.latitude + ',' + position.coords.longitude + ": ";
-        fetch('http://localhost:8080/weather-at/' + latLongCoords, {mode: 'cors'})
+        fetch('https://weather-service-weather-service.1d35.starter-us-east-1.openshiftapps.com/weather-at/' + latLongCoords, {mode: 'cors'})
         .then(
             function(response) {
                   if (response.ok) {
