@@ -4,15 +4,8 @@ title:
 permalink: /
 ---
 
-<div style="height: 20em;">
-    <span id="weather">
-    Meh :-)
-
-    Nothing here yet, please check back later...
-    </span>
-    <button onclick="loadWeatherData()">Refresh</button>
-
-</div>
+<div style="height: 20em;" id="weather">Meh :-) Nothing here yet, please check back later...</div>
+<button onclick="loadWeatherData()">Refresh</button>
 
 <script>
     const weatherServiceUrl = '{{ site.weather_service_url }}';
@@ -20,26 +13,28 @@ permalink: /
 
     function loadWeatherData() {
         if (navigator.geolocation) {
-            weatherSpan.innerHTML = "Loading weather data...";
+            weatherSpan.innerHTML = "<h3>Loading weather data...</h3>";
             navigator.geolocation.getCurrentPosition(displayWeather);
         } else {
-            weatherSpan.innerHTML = "Geolocation is not supported by this browser.";
+            weatherSpan.innerHTML = "<h3>Geolocation is not supported by this browser.</h3>";
         }
     }
 
     async function displayWeather(position) {
         let latLongCoords = position.coords.latitude + ',' + position.coords.longitude;
-        weatherSpan.innerHTML = `Retrieving current temperature for ${latLongCoords}: `;
+        weatherSpan.innerHTML = `<h3>Retrieving current temperature for ${latLongCoords}...</h3>`;
         try {
             const response = await fetch(`${weatherServiceUrl}/weather-at/${latLongCoords}`, {mode: 'cors'});
             const json = await response.json();
-            weatherSpan.innerHTML = `<h3>${json.name}</h3></br>
-                <h4>${json.main.temp}˚C</h4></br>
-                ${json.weather[0].description}</br>
-                wind ${json.wind.speed}m/s from ${degToCompass(json.wind.deg)}`
+            weatherSpan.innerHTML = `<h3 title="Coordinates: ${json.coord.lat},${json.coord.lon}">${json.name}
+                                         <img title="${json.weather[0].description}"
+                                              src="http://openweathermap.org/img/w/${json.weather[0].icon}.png"/>
+                                         <b title="wind ${json.wind.speed}m/s ${degToCompass(json.wind.deg)}"
+                                            >${json.main.temp}˚C</b>
+                                     </h3>`
         }
         catch(err) {
-            weatherSpan.innerHTML = `Failed to retrieve temperature for ${latLongCoords} :-(`;
+            weatherSpan.innerHTML = `<h3>Failed to retrieve temperature for ${latLongCoords} :-(</h3>`;
             console.log('Error: ', err)
         }
     }
