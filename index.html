@@ -35,7 +35,7 @@ permalink: /
                 const json = await response.json();
                 weatherSpan.innerHTML = `<h3 title="Coordinates: ${json.coord.lat},${json.coord.lon}, ${new Date().toISOString()}">${json.name}
                                              <img title="${json.weather[0].description}"
-                                                  src="http://openweathermap.org/img/w/${json.weather[0].icon}.png"/>
+                                                  src="https://openweathermap.org/img/w/${json.weather[0].icon}.png"/>
                                              <b title="wind ${json.wind.speed}m/s ${degToCompass(json.wind.deg)}"
                                                 >${json.main.temp}˚C</b>
                                          </h3>`;
