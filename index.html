@@ -4,25 +4,30 @@ title:
 permalink: /
 ---
 
-<div style="height: 20em;" id="weather">Meh :-) Nothing here yet, please check back later...</div>
+<div style="height: 20em;" id="weatherDiv">
+    <span id="weather">Meh :-) Nothing here yet, please check back later...<span>
+    <h6 id="weatherUpdateStatus"></h6>
+</div>
 <button onclick="loadWeatherData()">Refresh</button>
 
 <script>
     const weatherServiceUrl = '{{ site.weather_service_url }}';
     const weatherSpan = document.getElementById("weather");
+    const weatherUpdateStatusSpan = document.getElementById("weatherUpdateStatus");
 
     function loadWeatherData() {
         if (navigator.geolocation) {
-            weatherSpan.innerHTML = "<h3>Loading weather data...</h3>";
+            weatherUpdateStatusSpan.innerHTML = "Loading weather data...";
             navigator.geolocation.getCurrentPosition(displayWeather);
         } else {
-            weatherSpan.innerHTML = "<h3>Geolocation is not supported by this browser.</h3>";
+            weatherSpan.innerHTML = "<h3>Geolocation is not supported by this browser.</h3>"
+            weatherUpdateStatusSpan.innerHTML = "";
         }
     }
 
     async function displayWeather(position) {
         let latLongCoords = position.coords.latitude + ',' + position.coords.longitude;
-        weatherSpan.innerHTML = `<h3>Retrieving current temperature for ${latLongCoords}...</h3>`;
+        weatherUpdateStatusSpan.innerHTML = `Retrieving current temperature for ${latLongCoords}...`;
         let retries = 5;
         while (retries > 0) {
             try {
@@ -34,11 +39,12 @@ permalink: /
                                              <b title="wind ${json.wind.speed}m/s ${degToCompass(json.wind.deg)}"
                                                 >${json.main.temp}˚C</b>
                                          </h3>`;
+                weatherUpdateStatusSpan.innerHTML = "";
                 return;
             }
             catch(err) {
                 retries--;
-                weatherSpan.innerHTML = `<h3>Failed to retrieve temperature for ${latLongCoords} :-(</h3>`;
+                weatherUpdateStatusSpan.innerHTML = `Failed to retrieve temperature for ${latLongCoords}`;
                 console.log('Error: ', err);
                 await sleep(100);
             }
