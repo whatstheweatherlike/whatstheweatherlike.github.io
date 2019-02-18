@@ -28,7 +28,7 @@ permalink: /
             try {
                 const response = await fetch(`${weatherServiceUrl}/weather-at/${latLongCoords}`, {mode: 'cors'});
                 const json = await response.json();
-                weatherSpan.innerHTML = `<h3 title="Coordinates: ${json.coord.lat},${json.coord.lon}">${json.name}
+                weatherSpan.innerHTML = `<h3 title="Coordinates: ${json.coord.lat},${json.coord.lon}, ${new Date().toISOString()}">${json.name}
                                              <img title="${json.weather[0].description}"
                                                   src="http://openweathermap.org/img/w/${json.weather[0].icon}.png"/>
                                              <b title="wind ${json.wind.speed}m/s ${degToCompass(json.wind.deg)}"
@@ -56,4 +56,5 @@ permalink: /
     }
 
     loadWeatherData();
+    window.setInterval(loadWeatherData, 60000);
 </script>
