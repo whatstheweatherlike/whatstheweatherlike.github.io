@@ -23,20 +23,30 @@ permalink: /
     async function displayWeather(position) {
         let latLongCoords = position.coords.latitude + ',' + position.coords.longitude;
         weatherSpan.innerHTML = `<h3>Retrieving current temperature for ${latLongCoords}...</h3>`;
-        try {
-            const response = await fetch(`${weatherServiceUrl}/weather-at/${latLongCoords}`, {mode: 'cors'});
-            const json = await response.json();
-            weatherSpan.innerHTML = `<h3 title="Coordinates: ${json.coord.lat},${json.coord.lon}">${json.name}
-                                         <img title="${json.weather[0].description}"
-                                              src="http://openweathermap.org/img/w/${json.weather[0].icon}.png"/>
-                                         <b title="wind ${json.wind.speed}m/s ${degToCompass(json.wind.deg)}"
-                                            >${json.main.temp}˚C</b>
-                                     </h3>`
+        let retries = 5;
+        while (retries > 0) {
+            try {
+                const response = await fetch(`${weatherServiceUrl}/weather-at/${latLongCoords}`, {mode: 'cors'});
+                const json = await response.json();
+                weatherSpan.innerHTML = `<h3 title="Coordinates: ${json.coord.lat},${json.coord.lon}">${json.name}
+                                             <img title="${json.weather[0].description}"
+                                                  src="http://openweathermap.org/img/w/${json.weather[0].icon}.png"/>
+                                             <b title="wind ${json.wind.speed}m/s ${degToCompass(json.wind.deg)}"
+                                                >${json.main.temp}˚C</b>
+                                         </h3>`;
+                return;
+            }
+            catch(err) {
+                retries--;
+                weatherSpan.innerHTML = `<h3>Failed to retrieve temperature for ${latLongCoords} :-(</h3>`;
+                console.log('Error: ', err);
+                await sleep(100);
+            }
         }
-        catch(err) {
-            weatherSpan.innerHTML = `<h3>Failed to retrieve temperature for ${latLongCoords} :-(</h3>`;
-            console.log('Error: ', err)
-        }
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     function degToCompass(num) {
