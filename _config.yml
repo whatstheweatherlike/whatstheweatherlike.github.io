@@ -23,6 +23,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://www.whatstheweatherlike.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username:
 github_username:  whatstheweatherlike
+weather_service_url: "https://weather-service-weather-service.1d35.starter-us-east-1.openshiftapps.com"
 
 # Build settings
 markdown: kramdown

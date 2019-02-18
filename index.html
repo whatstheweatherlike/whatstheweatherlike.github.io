@@ -4,7 +4,7 @@ title:
 permalink: /
 ---
 
-<div id="weatherDiv">
+<div>
     <span id="weather">
     Meh :-)
 
@@ -15,41 +15,38 @@ permalink: /
 </div>
 
 <script>
-    var weatherDiv = document.getElementById("weather");
+    const weatherServiceUrl = '{{ site.weather_service_url }}';
+    const weatherSpan = document.getElementById("weather");
 
     function loadWeatherData() {
         if (navigator.geolocation) {
-            weatherDiv.innerHTML = "Loading weather data...";
-          navigator.geolocation.getCurrentPosition(displayWeather);
+            weatherSpan.innerHTML = "Loading weather data...";
+            navigator.geolocation.getCurrentPosition(displayWeather);
         } else {
-          weatherDiv.innerHTML = "Geolocation is not supported by this browser.";
+            weatherSpan.innerHTML = "Geolocation is not supported by this browser.";
         }
     }
 
     async function displayWeather(position) {
-        var latLongCoords = position.coords.latitude + ',' + position.coords.longitude;
-        weatherDiv.innerHTML = "Retrieving current temperature for " + position.coords.latitude + ',' + position.coords.longitude + ": ";
-        fetch('https://weather-service-weather-service.1d35.starter-us-east-1.openshiftapps.com/weather-at/' + latLongCoords, {mode: 'cors'})
-        .then(
-            function(response) {
-                  if (response.ok) {
-                      return response.json()
-                  }
-                  console.log('Looks like there was a problem. Status Code: ' +
-                    response.status);
-              }
-      )
-        .then(
-        function(json) {
-              weatherDiv.innerHTML = "Weather for " + json.name + ": " + json.main.temp + "˚C, " + json.weather[0].description + ", wind " + json.wind.speed + " knots from " + degToCompass(json.wind.deg)
-          }
-        )
-        .catch(err => { console.log('Error: ', err) });
+        let latLongCoords = position.coords.latitude + ',' + position.coords.longitude;
+        weatherSpan.innerHTML = `Retrieving current temperature for ${latLongCoords}: `;
+        try {
+            const response = await fetch(`${weatherServiceUrl}/weather-at/${latLongCoords}`, {mode: 'cors'});
+            const json = await response.json();
+            weatherSpan.innerHTML = `<h3>${json.name}</h3></br>
+                <h4>${json.main.temp}˚C</h4></br>
+                ${json.weather[0].description}</br>
+                wind ${json.wind.speed}m/s from ${degToCompass(json.wind.deg)}`
+        }
+        catch(err) {
+            weatherSpan.innerHTML = `Failed to retrieve temperature for ${latLongCoords} :-(`;
+            console.log('Error: ', err)
+        }
     }
 
     function degToCompass(num) {
-        var val = Math.floor((num / 22.5) + 0.5);
-        var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+        const val = Math.floor((num / 22.5) + 0.5);
+        const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
         return arr[(val % 16)];
     }
 
