@@ -8,7 +8,7 @@ baseurl: ""
 url: "https://www.whatstheweatherlike.io"
 twitter_username:
 github_username:  whatstheweatherlike
-weather_service_url: "https://weather-service-weather-service.1d35.starter-us-east-1.openshiftapps.com"
+weather_service_url: "https://api.whatstheweatherlike.io"
 
 # Build settings
 markdown: kramdown
