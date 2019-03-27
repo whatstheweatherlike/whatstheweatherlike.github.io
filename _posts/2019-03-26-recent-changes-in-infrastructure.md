@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Changed infrastructure to AWS ECS Cluster setup"
-date:   2019-02-17 19:34:57 +0200
+date:   2019-03-27 08:14:12 +0100
 categories: aws terraform cloudflare backend service infrastucture
 ---
 
